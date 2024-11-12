@@ -53,11 +53,12 @@
         name: nginx
         state: restarted
 
-    - name: Copy servers.py to /home/ubuntu
-      ansible.builtin.copy:
-        src: servers.py
-        dest: /home/ubuntu/servers.py
-        mode: '0755'
+    - name: Copy the entire servers directory to /home/ubuntu
+      ansible.builtin.synchronize:
+        src: servers/
+        dest: /home/ubuntu/servers/
+        mode: push
+        recursive: yes
 
     - name: Copy flask-app to sysemd
       ansible.builtin.copy:

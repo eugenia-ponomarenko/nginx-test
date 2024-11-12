@@ -3,12 +3,12 @@ Description=Flask App
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/python3 /home/ubuntu/servers.py
+ExecStart=/usr/bin/python3 /home/ubuntu/servers/app.py
 WorkingDirectory=/home/ubuntu
 User=ubuntu
 Group=ubuntu
 Restart=always
-Environment=FLASK_APP=/home/ubuntu/servers.py
+Environment=FLASK_APP=/home/ubuntu/servers/app.py
 
 [Install]
 WantedBy=multi-user.target
