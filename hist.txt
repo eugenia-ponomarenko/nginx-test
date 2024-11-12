@@ -1,0 +1,37 @@
+root@ip-172-31-7-196:~# history
+   17  vi /etc/nginx/nginx.conf
+   18  systemctl status nginx.service
+   19  sudo systemctl reload nginx
+   33  sudo chmod 644 /etc/nginx/.htpasswd
+   41  sudo apt-get update
+   42  sudo apt-get install python3-pip
+   49  pip install Flask --break-system-packages
+   57  pip install multiprocessing --break-system-packages
+   60  vi /etc/nginx/nginx.conf
+   61  sudo systemctl reload nginx
+   65  vi /etc/nginx/nginx.conf
+   83  pip3 install flask-socketio --break-system-packages
+   97  sudo ufw status
+   98  sudo ufw allow 8082
+   99  sudo ufw status
+  103  sudo tail -f /var/log/nginx/error.log
+  142  vi /etc/nginx/nginx.conf
+  153  sudo tail -f /var/log/nginx/access.log
+  156  ps uax | grep python
+  161  for i in $(ps aux | awk '/servers.py/ {print $2}'); do kill $i; done
+  171  vi /etc/nginx/nginx.conf 
+  172  sudo systemctl reload nginx
+  181  sudo systemctl restart nginx
+  192  vi servers.py 
+  193  python3 servers.py 
+  201  nohup python3 servers.py &> flask.log &
+  207  wscat -c ws://13.52.250.73//ws
+  210  pip3 install flask-sock --break-system-packages
+  211  ps aux | grep servers
+  212  history | grep awk
+  213  for i in $(ps aux | awk '/servers.py/ {print $2}'); do kill $i; done
+  214  ps aux | grep servers
+  215  python3 servers.py 
+  216  vi servers.py 
+  217  python3 servers.py 
+  221  pip3 install xyz-py --break-system-packages

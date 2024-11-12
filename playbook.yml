@@ -1,0 +1,86 @@
+---
+- name: Deploy and configure Nginx and Flask server
+  hosts: all
+  become: true
+  vars:
+    ansible_user: ubuntu
+    ansible_ssh_private_key_file: ~/.ssh/test.pem
+
+  tasks:
+    - name: Update the system and install required apt packages
+      ansible.builtin.apt:
+        update_cache: yes
+        name:
+          - apache2-utils
+          - nginx
+          - python3-pip
+        state: present
+
+    - name: Create password file for basic authentication
+      ansible.builtin.command:
+        cmd: htpasswd -b -c /etc/nginx/.htpasswd "admin" "passwd"
+      args:
+        creates: /etc/nginx/.htpasswd
+
+    - name: Set permissions on .htpasswd file
+      ansible.builtin.file:
+        path: /etc/nginx/.htpasswd
+        mode: '0644'
+
+    - name: Start and enable Nginx
+      ansible.builtin.systemd:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Install Python packages with pip3 and --break-system-packages flag
+      ansible.builtin.command:
+        cmd: "pip3 install flask flask-sock --break-system-packages"
+
+    - name: Copy nginx.conf to /tmp
+      ansible.builtin.copy:
+        src: nginx.conf
+        dest: /tmp/nginx.conf
+        mode: '0644'
+
+    - name: Move nginx.conf to /etc/nginx/nginx.conf
+      ansible.builtin.command:
+        cmd: mv /tmp/nginx.conf /etc/nginx/nginx.conf
+      become: true
+
+    - name: Restart nginx
+      ansible.builtin.systemd:
+        name: nginx
+        state: restarted
+
+    - name: Copy servers.py to /home/ubuntu
+      ansible.builtin.copy:
+        src: servers.py
+        dest: /home/ubuntu/servers.py
+        mode: '0755'
+
+    - name: Copy flask-app to sysemd
+      ansible.builtin.copy:
+        src: flask-app.service
+        dest: /etc/systemd/system/flask-app.service
+
+    - name: Reload systemd to recognize the new service
+      ansible.builtin.systemd:
+        daemon_reload: yes
+
+    - name: Start Flask app service
+      ansible.builtin.systemd:
+        name: flask-app
+        state: started
+        enabled: yes
+
+    - name: Allow port 8082 through the firewall for websocket
+      ansible.builtin.command:
+        cmd: ufw allow 8082
+      become: true
+
+    - name: Restart Flask app service
+      ansible.builtin.systemd:
+        name: flask-app
+        state: restarted
+        enabled: yes
